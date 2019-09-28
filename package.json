@@ -1,0 +1,35 @@
+{
+  "name": "buscador-sync-producer",
+  "version": "1.0.0",
+  "description": "Proof of concept for synchornization mongodb data to elasticsearch using aws sqs, this part is the producer part",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jriverox/MongoToElasticProducer.git"
+  },
+  "keywords": [
+    "mongodb",
+    "elasticsearch",
+    "aws",
+    "sqs"
+  ],
+  "author": "jriverox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jriverox/MongoToElasticProducer/issues"
+  },
+  "homepage": "https://github.com/jriverox/MongoToElasticProducer#readme",
+  "dependencies": {
+    "aws-sdk": "^2.528.0",
+    "dotenv": "^8.1.0",
+    "koa": "^2.8.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "moment": "^2.24.0",
+    "mongodb": "^3.3.2"
+  }
+}
