@@ -30,6 +30,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "moment": "^2.24.0",
-    "mongodb": "^3.3.2"
+    "mongodb": "^3.3.2",
+    "sync-request": "^6.1.0"
   }
 }

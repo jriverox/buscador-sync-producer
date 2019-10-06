@@ -5,6 +5,7 @@ const PersonalizationRepository = require("../infrastructure/repositories/person
 const SynchronizationTask = require("../models/synchronizationTask");
 const repository = new PersonalizationRepository();
 const queueManager = require("../infrastructure/queueManager");
+const logManager = require("../infrastructure/logging/logManager");
 
 module.exports = class PersonalizationService{
     async createJob(syncPersonalizationRequest){
@@ -13,14 +14,16 @@ module.exports = class PersonalizationService{
             let totalRows = await repository.getCount(syncPersonalizationRequest.country,
                 syncPersonalizationRequest.campaign,
                 syncPersonalizationRequest.personalizationType);
-    
+            let parameters = "";
             if(totalRows > 0){
                 const totalPages = totalRows > config.batchSize ? Math.ceil(totalRows / config.batchSize) : 1;
     
                 console.log("totalPages: ", totalPages, " totalRows:", totalRows );
-    
+                parameters = `${syncPersonalizationRequest.correlationId} / totalPages: ${totalPages} / totalRows: ${totalRows}`;
+                logManager.logInfo("PersonalizationService", "createJob", parameters, "Proceso iniciado.", 0, syncPersonalizationRequest.country, totalRows);
                 let tasks = [];
                 let batchCount = 0;
+
                 for (let page = 0; page < totalPages; page++) {
                     const task = new SynchronizationTask(
                         syncPersonalizationRequest.country,
@@ -41,10 +44,11 @@ module.exports = class PersonalizationService{
                     }
                 }
             }
-            const hrend = process.hrtime(hrstart);           
-            console.log(`Ready, documents sended to queue: ${totalRows}, execution time: ${(hrend[0] + hrend[1] / 1e9).toFixed(2)} seconds`);            
+            const hrend = process.hrtime(hrstart);
+            const executionTimeInMS = (hrend[0] + hrend[1] / 1e6);
+            logManager.logInfo("PersonalizationService", "createJob", parameters, "Proceso terminado.", executionTimeInMS, syncPersonalizationRequest.country, totalRows);
         } catch (error) {
-            console.log("Error:", error);
+            logManager.logError("PersonalizationService", "createJob", syncPersonalizationRequest.correlationId, error.message, syncPersonalizationRequest.country, error, "", "");
         }
     }    
 }

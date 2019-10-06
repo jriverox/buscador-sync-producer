@@ -1,10 +1,11 @@
 "use strict";
-const koa = require("koa");
+const Koa = require("koa");
 const bodyParser = require("koa-bodyparser");
-const app = new koa();
+const app = new Koa();
 const personalizationRouter = require("./routers/personalizationRouter");
 const dbObjectManager = require("./infrastructure/dbObjectManager");
 const config = require("./config");
+const logManager = require("./infrastructure/logging/logManager");
 
 app.use(bodyParser());
 
@@ -24,6 +25,5 @@ dbObjectManager.fetchAllDbs()
     console.log("Application not started because at least one connectionString was unsuccessful...");
 })
 .catch((error) => {
-    console.log("Catch in promise all");
-    console.log(error);
+    logManager.logError("index", "dbObjectManager.fetchAllDbs", "" , error.message, "", error, "", "");
 });

@@ -30,7 +30,16 @@ const config = {
         region: "us-east-1",
         accountId: process.env.AWS_ACCOUNT_ID,
         personalizationQueue: "buscador_sync_queue"
+    },
+    elasticLogging: {
+        endpoint: "https://search-qas-atd-f5uoi2tmrjd2i7rtdhfglnr7le.us-west-2.es.amazonaws.com",
+        pattern: "dev-buscador-sync2-",
+        type: "LogEvent",
+        enabledInfo: true,
+        enabledError: true,
+        application: "Producer"
     }
+
 };
 
 module.exports = config;
